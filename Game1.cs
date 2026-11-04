@@ -10,12 +10,26 @@ namespace Juego
         private SpriteBatch _spriteBatch = null!;
         private Texture2D _pixel = null!;
         private Jugador _jugador = null!;
-        private readonly List<Enemigo> _enemigos = new();
+        private GestorRondas _rondas = null!;   // enemigos nuevos: 4 rondas por nivel
         private Jefe? _jefe;
+        private JefeArdilla? _ardilla;   // jefe del nivel 1
+        private static readonly Rectangle PlataformaJefe = new Rectangle(380, 258, 200, 14);
+
+        // Cada plataforma es un rectángulo: (x, y de la superficie, ancho, alto).
+        private readonly List<Rectangle> _plataformas = new()
+        {
+            // Piso bajo
+            new Rectangle(50, 390, 160, 14),
+            new Rectangle(380, 390, 200, 14),
+            new Rectangle(750, 390, 160, 14),
+            // Piso medio
+            new Rectangle(215, 325, 150, 14),
+            new Rectangle(595, 325, 150, 14),
+            // Piso alto
+            PlataformaJefe
+        };
 
         private int _nivel = 1;
-        private int _enemigosDerrotados;
-        private const int EnemigosPorNivel = 4;
         private string _estado = "Jugando";
         private KeyboardState _tecladoAnterior;
 
@@ -39,7 +53,6 @@ namespace Juego
         protected override void Initialize()
         {
             _jugador = new Jugador(new Vector2(100, 390));
-            CrearEnemigos();
             base.Initialize();
         }
 
@@ -51,20 +64,25 @@ namespace Juego
             // mientras se preparan las imágenes definitivas del juego.
             _pixel = new Texture2D(GraphicsDevice, 1, 1);
             _pixel.SetData(new[] { Color.White });
+
             _jugador.CargarSprite(GraphicsDevice);
-            
+
+            // Los nombres de carpeta deben coincidir exactamente con los de tu disco.
+            Proyectil.CargarTextura(GraphicsDevice,
+                Path.Combine(AppContext.BaseDirectory, "Sprites", "1 wordl", "prtotagonista", "disparo.png"));
+
+            // Enemigos: flor, zorro y halcón malvados (carpetas dentro de "1 wordl").
+            _rondas = new GestorRondas(GraphicsDevice,
+                Path.Combine(AppContext.BaseDirectory, "Sprites", "1 wordl"));
+            IniciarNivelActual();
         }
 
-        private void CrearEnemigos()
+        // Arranca las 4 rondas del nivel actual; el jefe aparece al terminarlas.
+        private void IniciarNivelActual()
         {
-            _enemigos.Clear();
             _jefe = null;
-
-            for (int i = 0; i < EnemigosPorNivel; i++)
-            {
-                float x = 350 + i * 125;
-                _enemigos.Add(new Enemigo(new Vector2(x, 420), 1 + _nivel / 2));
-            }
+            _ardilla = null;
+            _rondas.IniciarNivel(_nivel);
         }
 
         protected override void Update(GameTime gameTime)
@@ -95,73 +113,61 @@ namespace Juego
                 return;
             }
 
-                        _jugador.Actualizar(teclado, _tecladoAnterior, delta);
+            _jugador.Actualizar(teclado, _tecladoAnterior, delta, _plataformas);
 
             foreach (Proyectil proyectil in _jugador.Proyectiles)
                 proyectil.Actualizar(delta);
 
             _jugador.Proyectiles.RemoveAll(p => p.FueraDePantalla);
 
-            foreach (Enemigo enemigo in _enemigos)
-                enemigo.Actualizar(_jugador.Posicion, delta);
+            // Rondas: mueve enemigos y espinas, y resuelve disparos y golpes al jugador.
+            _rondas.Actualizar(delta, _jugador, _plataformas);
 
-            // Los proyectiles del jugador pueden golpear a enemigos y al jefe.
-            foreach (Proyectil proyectil in _jugador.Proyectiles)
+            // Al terminar la ronda 4 aparece el jefe del nivel.
+            if (_rondas.NivelCompletado && _jefe == null && _ardilla == null)
             {
-                if (!proyectil.Activo) continue;
+                if (_nivel == 1)
+                    _ardilla = new JefeArdilla(GraphicsDevice,
+                        Path.Combine(AppContext.BaseDirectory, "Sprites"), PlataformaJefe);
+                else
+                    _jefe = new Jefe(new Vector2(760, 385), 8 + _nivel * 3);
+            }
 
-                foreach (Enemigo enemigo in _enemigos)
+            // Los proyectiles del jugador golpean al jefe.
+            if (_jefe != null && _jefe.Vivo)
+            {
+                foreach (Proyectil proyectil in _jugador.Proyectiles)
                 {
-                    if (enemigo.Vivo && proyectil.Bounds.Intersects(enemigo.Bounds))
+                    if (proyectil.Activo && proyectil.Bounds.Intersects(_jefe.Bounds))
                     {
-                        enemigo.RecibirGolpe();
+                        _jefe.RecibirGolpe();
                         proyectil.Activo = false;
-                        break;
                     }
                 }
 
-                if (proyectil.Activo && _jefe != null && _jefe.Vivo &&
-                    proyectil.Bounds.Intersects(_jefe.Bounds))
-                {
-                    _jefe.RecibirGolpe();
-                    proyectil.Activo = false;
-                }
-            }
-
-            _jugador.Proyectiles.RemoveAll(p => !p.Activo);
-            _enemigos.RemoveAll(e => !e.Vivo);
-            _enemigosDerrotados = EnemigosPorNivel - _enemigos.Count;
-
-            // Si ya no quedan enemigos pequeños, aparece el jefe del nivel.
-            if (_enemigos.Count == 0 && _jefe == null)
-                _jefe = new Jefe(new Vector2(760, 385), 8 + _nivel * 3);
-
-            if (_jefe != null && _jefe.Vivo)
-            {
                 _jefe.Actualizar(_jugador.Posicion, delta);
 
                 if (_jefe.Bounds.Intersects(_jugador.Bounds))
                     _jugador.RecibirGolpe();
             }
 
-            // Los enemigos que tocan al jugador le quitan vida.
-            foreach (Enemigo enemigo in _enemigos)
-            {
-                if (enemigo.Bounds.Intersects(_jugador.Bounds))
-                    _jugador.RecibirGolpe();
-            }
+            // La ardilla maneja sus propios ataques, secuaces y daño.
+            if (_ardilla != null && _ardilla.Vivo)
+                _ardilla.Actualizar(delta, _jugador, _plataformas);
+
+            _jugador.Proyectiles.RemoveAll(p => !p.Activo);
 
             if (_jugador.Vida <= 0)
                 _estado = "Perdiste";
 
-            if (_jefe != null && !_jefe.Vivo)
+            if ((_jefe != null && !_jefe.Vivo) || (_ardilla != null && !_ardilla.Vivo))
             {
                 if (_nivel < 3)
                 {
                     _nivel++;
                     _jugador.Curar();
                     _jugador.Posicion = new Vector2(100, 390);
-                    CrearEnemigos();
+                    IniciarNivelActual();
                 }
                 else
                 {
@@ -179,7 +185,7 @@ namespace Juego
             _estado = "Jugando";
             _jugador = new Jugador(new Vector2(100, 390));
             _jugador.CargarSprite(GraphicsDevice);
-            CrearEnemigos();
+            IniciarNivelActual();
         }
 
         protected override void Draw(GameTime gameTime)
@@ -196,16 +202,25 @@ namespace Juego
                 DibujarRectangulo(new Rectangle(i * 125, 430, 65, 25),
                     new Color(52, 54, 65));
 
+            // Plataformas: cuerpo oscuro con un borde claro arriba para que se vea dónde se pisa.
+            foreach (Rectangle p in _plataformas)
+            {
+                DibujarRectangulo(p, new Color(88, 78, 112));
+                DibujarRectangulo(new Rectangle(p.X, p.Y, p.Width, 4), new Color(150, 140, 185));
+            }
+
             _jugador.Dibujar(_spriteBatch, _pixel);
 
-            foreach (Enemigo enemigo in _enemigos)
-                enemigo.Dibujar(_spriteBatch, _pixel);
+            _rondas.Dibujar(_spriteBatch, _pixel);
 
             foreach (Proyectil proyectil in _jugador.Proyectiles)
                 proyectil.Dibujar(_spriteBatch, _pixel);
 
             if (_jefe != null && _jefe.Vivo)
                 _jefe.Dibujar(_spriteBatch, _pixel);
+
+            if (_ardilla != null && _ardilla.Vivo)
+                _ardilla.Dibujar(_spriteBatch, _pixel);
 
             // HUD hecho con barras para no depender todavía de una fuente externa.
             DibujarRectangulo(new Rectangle(20, 20, 160, 18), Color.DarkRed);
@@ -214,6 +229,20 @@ namespace Juego
 
             DibujarRectangulo(new Rectangle(20, 48, 120, 8), Color.Black);
             DibujarRectangulo(new Rectangle(20, 48, _nivel * 40, 8), Color.Gold);
+
+            // Progreso de rondas: 4 cuadritos, los completados en dorado.
+            for (int i = 0; i < GestorRondas.RondasPorNivel; i++)
+            {
+                bool hecha = i < _rondas.RondaActual - 1 || _rondas.NivelCompletado;
+                bool actual = i == _rondas.RondaActual - 1 && !_rondas.NivelCompletado;
+                DibujarRectangulo(new Rectangle(20 + i * 22, 64, 18, 8),
+                    hecha ? Color.Gold : actual ? Color.Orange : Color.Black);
+            }
+
+            // Recarga del dash (cian = listo).
+            DibujarRectangulo(new Rectangle(20, 78, 88, 6), Color.Black);
+            DibujarRectangulo(new Rectangle(20, 78, (int)(88 * _jugador.DashProgreso), 6),
+                _jugador.DashProgreso >= 1f ? Color.Cyan : Color.SteelBlue);
 
             // Mensajes visuales sencillos. Enter reinicia si perdiste.
             if (_estado == "Perdiste")

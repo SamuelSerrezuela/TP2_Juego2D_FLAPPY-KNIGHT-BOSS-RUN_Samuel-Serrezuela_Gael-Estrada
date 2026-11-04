@@ -60,9 +60,7 @@ E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\pixil-
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\pixil-frame-0-25.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\pixilart-sprite.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\caminata_azul.png
-E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\disparo protagoniasta azul.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\disparo.png
-E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\salto protagonista azul.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\roca 3 real.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\roca1.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\roca2.png
@@ -135,3 +133,18 @@ E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\yeti 9
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\yeti 9.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\yeti.png
 E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\zorro malvado\zorro malvado caminando.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\disparo_azul.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\prtotagonista\salto_azul.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\alerta_peligro.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla base.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla lanzando 2.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla lanzando.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla por lanzar derecha.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla por lanzar.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla tras lanzar 1.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla tras lanzar 2.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota base derecha .png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota base izquierda.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota lanzando derecha.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota lanzando izquierda.png
+E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota prepandose derecha.png

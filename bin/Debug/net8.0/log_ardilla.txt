@@ -1,0 +1,16 @@
+Buscando en: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites
+PNG encontrados: 117
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla base.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla lanzando.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla lanzando 2.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla por lanzar derecha.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla por lanzar.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla tras lanzar 1.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\ardilla tras lanzar 2.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota base derecha .png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota base izquierda.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota lanzando derecha.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota lanzando izquierda.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\jefe ardilla\bellota prepandose derecha.png
+FALTA: bellota prepandose izquierda.png
+ok: E:\flappy de gael\FLAPPY-KNIGHT-BOSS-RUN\bin\Debug\net8.0\Sprites\1 wordl\alerta_peligro.png
