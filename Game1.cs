@@ -33,7 +33,7 @@ namespace Juego
         };
 
         private int _nivel = 1;   // el juego tiene un solo nivel
-        private string _estado = "Jugando";
+        private string _estado = "Menu";
         private KeyboardState _tecladoAnterior;
 
         private readonly Color[] _fondos =
@@ -74,6 +74,8 @@ namespace Juego
             // Textura blanca de 1x1. Se usa para dibujar formas sencillas
             _pixel = new Texture2D(GraphicsDevice, 1, 1);
             _pixel.SetData(new[] { Color.White });
+            
+            _menu = new Menu();
 
             _jugador.CargarSprite(GraphicsDevice);
 
@@ -101,6 +103,23 @@ namespace Juego
 
             if (teclado.IsKeyDown(Keys.Escape))
                 Exit();
+
+                // Control del menú principal.
+                if (_estado == "Menu")
+        {
+        ResultadoMenu resultado = _menu.Actualizar(
+         teclado, _tecladoAnterior);
+
+      if (resultado == ResultadoMenu.Jugar)
+        _estado = "Jugando";
+
+     if (resultado == ResultadoMenu.Salir)
+        Exit();
+
+    _tecladoAnterior = teclado;
+    base.Update(gameTime);
+    return;
+}
 
             if (_estado != "Jugando")
             {
@@ -162,11 +181,26 @@ namespace Juego
             IniciarNivelActual();
         }
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(_fondos[_nivel - 1]);
+       protected override void Draw(GameTime gameTime)
+{
+    // Mostrar el menú principal.
+    if (_estado == "Menu")
+    {
+        GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        _spriteBatch.Begin();
+
+        _menu.Dibujar(_spriteBatch, _pixel);
+
+        _spriteBatch.End();
+
+        base.Draw(gameTime);
+        return;
+    }
+
+    GraphicsDevice.Clear(_fondos[_nivel - 1]);
+
+    _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
             // Dibujar la imagen de fondo si se cargó correctamente
             if (_fondo != null)
