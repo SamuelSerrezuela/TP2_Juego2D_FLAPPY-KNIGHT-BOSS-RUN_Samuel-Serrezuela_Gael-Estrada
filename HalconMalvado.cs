@@ -50,7 +50,7 @@ namespace Juego
                 }
             }
 
-            // No salirse de la pantalla ni hundirse bajo el suelo.
+            
             Posicion.X = MathHelper.Clamp(Posicion.X, 20, 940);
             Posicion.Y = MathHelper.Clamp(Posicion.Y, Alto, 455f);
         }
