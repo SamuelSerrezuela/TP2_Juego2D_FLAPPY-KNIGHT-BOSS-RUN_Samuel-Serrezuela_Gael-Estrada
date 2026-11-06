@@ -35,7 +35,7 @@ namespace Juego
                     _temporizador = IntervaloSalto;
                     _enAire = true;
                     float dx = jugadorCentro.X - Posicion.X;
-                    // Tiempo de vuelo ≈ 2*v/g; ajustamos vx para caer cerca del jugador.
+                    
                     float tVuelo = 2f * FuerzaSalto / Gravedad;
                     float vx = MathHelper.Clamp(dx / tVuelo, -VelMaxHorizontal, VelMaxHorizontal);
                     _velocidad = new Vector2(vx, -FuerzaSalto);

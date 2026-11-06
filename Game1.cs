@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.IO;
+using System;
 
 namespace Juego
 {
@@ -9,10 +12,10 @@ namespace Juego
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch = null!;
         private Texture2D _pixel = null!;
+        private Texture2D? _fondo;   // Imagen de fondo cargada
         private Jugador _jugador = null!;
-        private GestorRondas _rondas = null!;   // enemigos nuevos: 4 rondas por nivel
-        private Jefe? _jefe;
-        private JefeArdilla? _ardilla;   // jefe del nivel 1
+        private GestorRondas _rondas = null!;   // enemigos: 4 rondas
+        private JefeArdilla? _ardilla;          // jefe final del juego
         private static readonly Rectangle PlataformaJefe = new Rectangle(380, 258, 200, 14);
 
         // Cada plataforma es un rectángulo: (x, y de la superficie, ancho, alto).
@@ -29,7 +32,7 @@ namespace Juego
             PlataformaJefe
         };
 
-        private int _nivel = 1;
+        private int _nivel = 1;   // el juego tiene un solo nivel
         private string _estado = "Jugando";
         private KeyboardState _tecladoAnterior;
 
@@ -60,8 +63,15 @@ namespace Juego
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // Cargar imagen de fondo desde la carpeta Sprites (fondo.jpg)
+            string rutaFondo = Path.Combine(AppContext.BaseDirectory, "Sprites", "1 world", "fondo.jpg");
+            if (File.Exists(rutaFondo))
+            {
+                using var stream = File.OpenRead(rutaFondo);
+                _fondo = Texture2D.FromStream(GraphicsDevice, stream);
+            }
+
             // Textura blanca de 1x1. Se usa para dibujar formas sencillas
-            // mientras se preparan las imágenes definitivas del juego.
             _pixel = new Texture2D(GraphicsDevice, 1, 1);
             _pixel.SetData(new[] { Color.White });
 
@@ -77,10 +87,9 @@ namespace Juego
             IniciarNivelActual();
         }
 
-        // Arranca las 4 rondas del nivel actual; el jefe aparece al terminarlas.
+        // Arranca las 4 rondas; el jefe aparece al terminarlas.
         private void IniciarNivelActual()
         {
-            _jefe = null;
             _ardilla = null;
             _rondas.IniciarNivel(_nivel);
         }
@@ -121,37 +130,13 @@ namespace Juego
             _jugador.Proyectiles.RemoveAll(p => p.FueraDePantalla);
 
             // Rondas: mueve enemigos y espinas, y resuelve disparos y golpes al jugador.
-            _rondas.Actualizar(delta, _jugador, _plataformas);
+            _rondas.Actualizar(delta, _jugador);
+            // Al terminar la ronda 4 aparece el jefe.
+            if (_rondas.NivelCompletado && _ardilla == null)
+                _ardilla = new JefeArdilla(GraphicsDevice,
+                    Path.Combine(AppContext.BaseDirectory, "Sprites"), PlataformaJefe);
 
-            // Al terminar la ronda 4 aparece el jefe del nivel.
-            if (_rondas.NivelCompletado && _jefe == null && _ardilla == null)
-            {
-                if (_nivel == 1)
-                    _ardilla = new JefeArdilla(GraphicsDevice,
-                        Path.Combine(AppContext.BaseDirectory, "Sprites"), PlataformaJefe);
-                else
-                    _jefe = new Jefe(new Vector2(760, 385), 8 + _nivel * 3);
-            }
-
-            // Los proyectiles del jugador golpean al jefe.
-            if (_jefe != null && _jefe.Vivo)
-            {
-                foreach (Proyectil proyectil in _jugador.Proyectiles)
-                {
-                    if (proyectil.Activo && proyectil.Bounds.Intersects(_jefe.Bounds))
-                    {
-                        _jefe.RecibirGolpe();
-                        proyectil.Activo = false;
-                    }
-                }
-
-                _jefe.Actualizar(_jugador.Posicion, delta);
-
-                if (_jefe.Bounds.Intersects(_jugador.Bounds))
-                    _jugador.RecibirGolpe();
-            }
-
-            // La ardilla maneja sus propios ataques, secuaces y daño.
+            // La ardilla maneja sus propios ataques, bellotas y daño.
             if (_ardilla != null && _ardilla.Vivo)
                 _ardilla.Actualizar(delta, _jugador, _plataformas);
 
@@ -160,20 +145,9 @@ namespace Juego
             if (_jugador.Vida <= 0)
                 _estado = "Perdiste";
 
-            if ((_jefe != null && !_jefe.Vivo) || (_ardilla != null && !_ardilla.Vivo))
-            {
-                if (_nivel < 3)
-                {
-                    _nivel++;
-                    _jugador.Curar();
-                    _jugador.Posicion = new Vector2(100, 390);
-                    IniciarNivelActual();
-                }
-                else
-                {
-                    _estado = "Ganaste";
-                }
-            }
+            // Un solo nivel: al derrotar al jefe se completa el juego.
+            if (_ardilla != null && !_ardilla.Vivo)
+                _estado = "Ganaste";
 
             _tecladoAnterior = teclado;
             base.Update(gameTime);
@@ -193,6 +167,12 @@ namespace Juego
             GraphicsDevice.Clear(_fondos[_nivel - 1]);
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            // Dibujar la imagen de fondo si se cargó correctamente
+            if (_fondo != null)
+            {
+                _spriteBatch.Draw(_fondo, new Rectangle(0, 0, 960, 540), Color.White);
+            }
 
             // Suelo.
             DibujarRectangulo(new Rectangle(0, 455, 960, 85), new Color(38, 35, 43));
@@ -216,32 +196,27 @@ namespace Juego
             foreach (Proyectil proyectil in _jugador.Proyectiles)
                 proyectil.Dibujar(_spriteBatch, _pixel);
 
-            if (_jefe != null && _jefe.Vivo)
-                _jefe.Dibujar(_spriteBatch, _pixel);
-
             if (_ardilla != null && _ardilla.Vivo)
                 _ardilla.Dibujar(_spriteBatch, _pixel);
 
             // HUD hecho con barras para no depender todavía de una fuente externa.
+            // Vida del jugador.
             DibujarRectangulo(new Rectangle(20, 20, 160, 18), Color.DarkRed);
             DibujarRectangulo(new Rectangle(20, 20, Math.Max(0, _jugador.Vida * 16), 18),
                 Color.LimeGreen);
-
-            DibujarRectangulo(new Rectangle(20, 48, 120, 8), Color.Black);
-            DibujarRectangulo(new Rectangle(20, 48, _nivel * 40, 8), Color.Gold);
 
             // Progreso de rondas: 4 cuadritos, los completados en dorado.
             for (int i = 0; i < GestorRondas.RondasPorNivel; i++)
             {
                 bool hecha = i < _rondas.RondaActual - 1 || _rondas.NivelCompletado;
                 bool actual = i == _rondas.RondaActual - 1 && !_rondas.NivelCompletado;
-                DibujarRectangulo(new Rectangle(20 + i * 22, 64, 18, 8),
-                    hecha ? Color.Gold : actual ? Color.Orange : Color.Black);
+                DibujarRectangulo(new Rectangle(20 + i * 22, 48, 18, 8),
+                    hecha ? Color.Gold : (actual ? Color.SteelBlue : Color.Gray));
             }
 
             // Recarga del dash (cian = listo).
-            DibujarRectangulo(new Rectangle(20, 78, 88, 6), Color.Black);
-            DibujarRectangulo(new Rectangle(20, 78, (int)(88 * _jugador.DashProgreso), 6),
+            DibujarRectangulo(new Rectangle(20, 62, 88, 6), Color.Black);
+            DibujarRectangulo(new Rectangle(20, 62, (int)(88 * _jugador.DashProgreso), 6),
                 _jugador.DashProgreso >= 1f ? Color.Cyan : Color.SteelBlue);
 
             // Mensajes visuales sencillos. Enter reinicia si perdiste.
@@ -249,12 +224,10 @@ namespace Juego
             {
                 DibujarRectangulo(new Rectangle(260, 190, 440, 120), Color.DarkRed);
                 DibujarRectangulo(new Rectangle(290, 220, 380, 12), Color.White);
-                DibujarRectangulo(new Rectangle(330, 255, 300, 12), Color.Orange);
             }
             else if (_estado == "Ganaste")
             {
                 DibujarRectangulo(new Rectangle(260, 190, 440, 120), Color.DarkGreen);
-                DibujarRectangulo(new Rectangle(300, 220, 360, 12), Color.Gold);
                 DibujarRectangulo(new Rectangle(340, 255, 280, 12), Color.White);
             }
 

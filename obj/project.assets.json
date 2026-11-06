@@ -279,11 +279,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\flappy de gael\\FLAPPY-KNIGHT-BOSS-RUN\\Proyecto_MonoGame_3Niveles.csproj",
+      "projectUniqueName": "E:\\repo mersh\\TP2_Juego2D_FLAPPY-KNIGHT-BOSS-RUN_Samuel-Serrezuela_Gael-Estrada\\Proyecto_MonoGame_3Niveles.csproj",
       "projectName": "Proyecto_MonoGame_3Niveles",
-      "projectPath": "E:\\flappy de gael\\FLAPPY-KNIGHT-BOSS-RUN\\Proyecto_MonoGame_3Niveles.csproj",
+      "projectPath": "E:\\repo mersh\\TP2_Juego2D_FLAPPY-KNIGHT-BOSS-RUN_Samuel-Serrezuela_Gael-Estrada\\Proyecto_MonoGame_3Niveles.csproj",
       "packagesPath": "C:\\Users\\pepe lopez\\.nuget\\packages\\",
-      "outputPath": "E:\\flappy de gael\\FLAPPY-KNIGHT-BOSS-RUN\\obj\\",
+      "outputPath": "E:\\repo mersh\\TP2_Juego2D_FLAPPY-KNIGHT-BOSS-RUN_Samuel-Serrezuela_Gael-Estrada\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

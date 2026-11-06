@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IMXbcHWhgH8=",
+  "dgSpecHash": "GYZVDWK2kHg=",
   "success": true,
-  "projectFilePath": "E:\\flappy de gael\\FLAPPY-KNIGHT-BOSS-RUN\\Proyecto_MonoGame_3Niveles.csproj",
+  "projectFilePath": "E:\\repo mersh\\TP2_Juego2D_FLAPPY-KNIGHT-BOSS-RUN_Samuel-Serrezuela_Gael-Estrada\\Proyecto_MonoGame_3Niveles.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pepe lopez\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.4.1\\monogame.framework.desktopgl.3.8.4.1.nupkg.sha512",
     "C:\\Users\\pepe lopez\\.nuget\\packages\\monogame.library.openal\\1.24.3.2\\monogame.library.openal.1.24.3.2.nupkg.sha512",
