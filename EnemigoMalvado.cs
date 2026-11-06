@@ -5,9 +5,9 @@ namespace Juego
 {
     public abstract class EnemigoMalvado
     {
-        public const int VidaMaxima = 5;            // 5 disparos para morir
+        public const int VidaMaxima = 5;            
 
-        // Posicion = centro-abajo del enemigo (los pies).
+       
         public Vector2 Posicion;
         public int Vida { get; private set; } = VidaMaxima;
         public bool Activo => Vida > 0;
@@ -15,7 +15,7 @@ namespace Juego
         protected readonly Animacion _anim;
         protected readonly float _escala;
         protected bool _mirandoIzquierda;
-        // true si el sprite original ya mira a la izquierda (entonces el flip se invierte).
+      
         protected bool _spriteMiraIzquierda;
         private float _flash;
         private float _tiempo;
@@ -41,7 +41,7 @@ namespace Juego
             _flash = 0.12f;
         }
 
-        // jugadorCentro = centro del Bounds del jugador.
+        
         public abstract void Actualizar(float delta, Vector2 jugadorCentro, List<Espina> espinas);
 
         protected void ActualizarComun(float delta)
@@ -52,16 +52,16 @@ namespace Juego
 
         public virtual void Dibujar(SpriteBatch spriteBatch, Texture2D pixel)
         {
-            // Parpadeo al recibir daño.
+            
             if (_flash > 0 && ((int)(_tiempo * 40) % 2 == 0)) return;
 
             var destino = new Vector2(Posicion.X - Ancho / 2f, Posicion.Y - Alto);
-            // Por defecto el sprite mira a la derecha; _spriteMiraIzquierda lo invierte.
+           
             _anim.Dibujar(spriteBatch, destino, _escala, _mirandoIzquierda != _spriteMiraIzquierda);
         }
     }
 
-    // Espina que escupe la flor.
+    
     public class Espina
     {
         private Vector2 _pos;
@@ -81,7 +81,7 @@ namespace Juego
         public void Dibujar(SpriteBatch spriteBatch, Texture2D pixel)
         {
             float rot = (float)Math.Atan2(_vel.Y, _vel.X);
-            // Espina = rectangulito verde rotado (cámbialo por un sprite cuando tengas uno).
+           
             spriteBatch.Draw(pixel, _pos, null, Color.LimeGreen, rot,
                 new Vector2(0.5f, 0.5f), new Vector2(14, 4), SpriteEffects.None, 0f);
         }
