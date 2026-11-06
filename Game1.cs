@@ -12,6 +12,7 @@ namespace Juego
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch = null!;
         private Texture2D _pixel = null!;
+        private Menu _menu = null!;
         private Texture2D? _fondo;   // Imagen de fondo cargada
         private Jugador _jugador = null!;
         private GestorRondas _rondas = null!;   // enemigos: 4 rondas
