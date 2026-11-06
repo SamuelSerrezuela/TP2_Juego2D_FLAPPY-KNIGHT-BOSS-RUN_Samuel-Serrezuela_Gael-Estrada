@@ -11,7 +11,7 @@ namespace Juego
         private const float Suelo = 455f;
         private const float TiempoAlerta = 1.6f;
 
-        // Enemigos de cada ronda: { flores, zorros, halcones }
+        
         private static readonly int[][] Rondas =
         {
             new[] { 2, 0, 0 },   // ronda 1
