@@ -108,13 +108,13 @@ namespace Juego
                 // Control del menú principal.
                 if (_estado == "Menu")
         {
-        ResultadoMenu resultado = _menu.Actualizar(
+        OpcionMenu Resultado = _menu.Actualizar(
          teclado, _tecladoAnterior);
 
-      if (resultado == ResultadoMenu.Jugar)
+      if (Resultado == OpcionMenu.Jugar)
         _estado = "Jugando";
 
-     if (resultado == ResultadoMenu.Salir)
+     if (Resultado == OpcionMenu.Salir)
         Exit();
 
     _tecladoAnterior = teclado;
